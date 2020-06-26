@@ -131,6 +131,7 @@ fi
 ### END /etc/grub.d/01_users ###
 
 ### BEGIN /etc/grub.d/10_linux ###
+{% if rhel_os_major_version == '7' %}
 menuentry '[QUBINODE] {{ iso_file }}  {{ ks_file }} Kickstart' --class rhel fedora --class gnu-linux --class gnu --class os --unrestricted $menuentry_id_option 'gnulinux-3.10.0-957.el7.x86_64-advanced-a6984e62-9f65-4c00-884f-18a3884867cb' {
        set ISO=/boot/iso/{{ iso_file }}
        set KS=/boot/{{ ks_file }}
@@ -141,11 +142,12 @@ menuentry '[QUBINODE] {{ iso_file }}  {{ ks_file }} Kickstart' --class rhel fedo
        set gfxpayload=keep
        insmod gzio
        insmod part_msdos
+       insmod fat
        linuxefi (loop)/isolinux/vmlinuz inst.stage2=hd:UUID=$FSUUID:$ISO inst.repo=hd:UUID=$FSUUID:$ISO inst.ks=hd:UUID=$FSUUID:$KS rhgb quiet
        initrdefi (loop)/isolinux/initrd.img
 }
 
-menuentry '[ISO] {{ iso_file }} --class rhel fedora --class gnu-linux' --class gnu --class os --unrestricted $menuentry_id_option 'gnulinux-3.10.0-957.el7.x86_64-advanced-a6984e62-9f65-4c00-884f-18a3884867cb' {
+menuentry '[ISO] {{ iso_file }}' --class rhel fedora --class gnu-linux --class gnu --class os --unrestricted $menuentry_id_option 'gnulinux-3.10.0-957.el7.x86_64-advanced-a6984e62-9f65-4c00-884f-18a3884867cb' {
        set ISO=/boot/iso/{{ iso_file }}
        set FSUUID={{ dev_fsuuid.stdout }}
        search --fs-uuid --set=root $FSUUID
@@ -154,10 +156,39 @@ menuentry '[ISO] {{ iso_file }} --class rhel fedora --class gnu-linux' --class g
        set gfxpayload=keep
        insmod gzio
        insmod part_msdos
+       insmod fat
        linuxefi (loop)/isolinux/vmlinuz inst.stage2=hd:UUID=$FSUUID:$ISO inst.repo=hd:UUID=$FSUUID:$ISO rhgb quiet
        initrdefi (loop)/isolinux/initrd.img
 }
+{% elif rhel_os_major_version == '8' %}
+menuentry '[QUBINODE] {{ iso_file }}  {{ ks_file }} Kickstart' --class fedora --class gnu-linux --class gnu --class os {
+       set ISO=/boot/iso/{{ iso_file }}
+       set KS=/boot/{{ ks_file }}
+       set FSUUID={{ dev_fsuuid.stdout }}
+       search --fs-uuid --set=root $FSUUID
+       loopback loop $ISO
+       load_video
+       set gfxpayload=keep
+       insmod gzio
+       insmod part_msdos
+       insmod fat
+       linuxefi (loop)/isolinux/vmlinuz inst.stage2=hd:UUID=$FSUUID:$ISO inst.repo=hd:UUID=$FSUUID:$ISO inst.ks=hd:UUID=$FSUUID:$KS rhgb quiet
+       initrdefi (loop)/isolinux/initrd.img
+}
 
+menuentry '[ISO] {{ iso_file }}' --class fedora --class gnu-linux --class gnu --class os {
+       set ISO=/boot/iso/{{ iso_file }}
+       set FSUUID={{ dev_fsuuid.stdout }}
+       search --fs-uuid --set=root $FSUUID
+       loopback loop $ISO
+       load_video
+       set gfxpayload=keep
+       insmod gzio
+       insmod part_msdos
+       insmod fat
+       linuxefi (loop)/isolinux/vmlinuz inst.stage2=hd:UUID=$FSUUID:$ISO inst.repo=hd:UUID=$FSUUID:$ISO rhgb quiet
+       initrdefi (loop)/isolinux/initrd.img
+{% endif %}
 menuentry "Boot from next device"  {
  load_video
  exit
