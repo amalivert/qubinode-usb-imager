@@ -47,10 +47,6 @@
   become: yes
   command: /usr/sbin/parted -s "{{ usb_device }}" mklabel msdos
 
-- name: create msdos boot label
-  become: yes
-  command: /usr/sbin/parted -s "{{ usb_device }}" mklabel msdos
-
 - name: create EFI boot partition
   become: yes
   command: /usr/sbin/parted -s "{{ usb_device }}" mkpart primary 1MiB 551MiB

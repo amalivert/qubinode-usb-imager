@@ -188,6 +188,7 @@ menuentry '[ISO] {{ iso_file }}' --class fedora --class gnu-linux --class gnu --
        insmod fat
        linuxefi (loop)/isolinux/vmlinuz inst.stage2=hd:UUID=$FSUUID:$ISO inst.repo=hd:UUID=$FSUUID:$ISO rhgb quiet
        initrdefi (loop)/isolinux/initrd.img
+
 {% endif %}
 menuentry "Boot from next device"  {
  load_video
