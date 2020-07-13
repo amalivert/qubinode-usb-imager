@@ -23,7 +23,7 @@
     sudo grub2-install 
     --target=i386-pc 
     --recheck 
-    --boot-directory="/media/data/boot {{ usb_device }}"
+    --boot-directory=/media/data/boot "{{ usb_device }}"
 
 - name: install efi grub filesystem
   become: yes
