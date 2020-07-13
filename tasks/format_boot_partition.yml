@@ -58,3 +58,11 @@
 - name: format efi boot grub filesystem
   become: yes
   command: /usr/sbin/mkfs.fat -F32 "{{ usb_device }}"1 
+
+# - name: create LEGACY boot partition
+#   become: yes
+#   command: /usr/sbin/parted -s "{{ usb_device }}" mkpart primary 551MiB 1100MiB
+
+# - name: enable boot flag on LEGACY partition
+#   become: yes
+#   command: /usr/sbin/parted -s "{{ usb_device }}" set 1 boot on
