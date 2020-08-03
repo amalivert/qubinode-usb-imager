@@ -44,12 +44,20 @@
 - debug:
     var: "{{ dev_fsuuid }}"
 
+# - name: deploy qubinode custom grub.conf file
+#   become: yes
+#   template:
+#     src: grub2.efi.conf.j2
+#     dest: '/media/data/boot/grub2/grub.cfg'
+#     mode: '0644'
+
 - name: deploy qubinode custom grub.conf file
   become: yes
   template:
-    src: grub2.efi.conf.j2
+    src: grub2.efi.7.conf.j2
     dest: '/media/data/boot/grub2/grub.cfg'
     mode: '0644'
+  when: rhel_os_major_version == '7'
 
 - name: deploy qubinode custom kickstart files
   become: yes
