@@ -92,6 +92,7 @@ menuentry 'Red Hat Enterprise Linux Server (3.10.0-1127.el7.x86_64) 7.8 (Maipo)'
 	insmod gzio
 	insmod part_msdos
 	insmod xfs
+  set FSUUID={{ dev_fsuuid.stdout }}
 	set root='hd0,msdos'
 	if [ x$feature_platform_search_hint = xy ]; then
 	  search --no-floppy --fs-uuid --set=root --hint-bios=hd0,msdos1 --hint-efi=hd0,msdos --hint-baremetal=ahci0,msdos1  $FSUUID
@@ -107,6 +108,7 @@ menuentry 'Red Hat Enterprise Linux Server (0-rescue-1164b42ee2a446838955e3ac703
 	insmod part_msdos
 	insmod xfs
 	set root='hd0,msdos'
+  set FSUUID={{ dev_fsuuid.stdout }}
 	if [ x$feature_platform_search_hint = xy ]; then
 	  search --no-floppy --fs-uuid --set=root --hint-bios=hd0,msdos1 --hint-efi=hd0,msdos1 --hint-baremetal=ahci0,msdos1  $FSUUID
 	else
